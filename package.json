@@ -66,6 +66,11 @@
           "default": false,
           "description": "Travis use pro or community"
         },
+        "travis.enterprise": {
+          "type": "string",
+          "default": "",
+          "description": "Travis Enterprise url. This takes precendence over travis.pro"
+        },
         "travis.github_oauth_token": {
           "type": "string",
           "default": "",
