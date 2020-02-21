@@ -106,7 +106,9 @@ export default class TravisStatusIndicator {
 		let open = require('open');
 		let repo = this.getUserRepo();
 		let base = "https://travis-ci"
-		if (workspace.getConfiguration('travis')['pro']) {
+		if (workspace.getConfiguration('travis')['enterprise']) {
+			base = workspace.getConfiguration('travis')['enterprise'] + '/'
+		} else if (workspace.getConfiguration('travis')['pro']) {
 			base += '.com/'
 		} else {
 			base += '.org/'
@@ -248,10 +250,17 @@ export default class TravisStatusIndicator {
 
 	private getTravis(): any {
 		if (this._travis == null) {
-			this._travis = new Travis({
-				version: '2.0.0',
-				pro: workspace.getConfiguration('travis')['pro']
-			})
+			if (workspace.getConfiguration('travis')['enterprise'] != "") {
+				this._travis = new Travis({
+					version: '2.0.0',
+					enterprise: workspace.getConfiguration('travis')['enterprise']
+				})
+			} else {
+				this._travis = new Travis({
+					version: '2.0.0',
+					pro: workspace.getConfiguration('travis')['pro']
+				})
+			}
 		}
 		// Make sure that we have github token or basic credentials
 		if (workspace.getConfiguration('travis')['github_oauth_token'] != "") {
